@@ -1,7 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dokter\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/dashboard', function () {
-    return inertia('Dokter/Dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

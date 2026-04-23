@@ -19,7 +19,9 @@ use App\Services\OrderService;
 use App\Services\ReportService;
 use App\Services\SchedulingService;
 use App\Services\VisitService;
+use App\Http\Responses\LoginResponse;
 use Carbon\CarbonImmutable;
+use Laravel\Fortify\Contracts\LoginResponse as LoginResponseContract;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -32,6 +34,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // ---- Auth Response Override ----
+        $this->app->singleton(LoginResponseContract::class, LoginResponse::class);
+
         // ---- Repositories (singleton: satu instance selama request) ----
         $this->app->singleton(OrderRepository::class);
         $this->app->singleton(StaffRepository::class);
