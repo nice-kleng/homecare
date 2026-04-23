@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { dashboard, login, register } from '@/routes';
+import { login, register } from '@/routes';
+import { computed } from 'vue';
+import { useAuth } from '@/composables/useAuth';
+import * as AdminDashboard from '@/actions/App/Http/Controllers/Admin/DashboardController';
+import * as PetugasDashboard from '@/actions/App/Http/Controllers/Petugas/DashboardController';
+import * as DokterDashboard from '@/actions/App/Http/Controllers/Dokter/DashboardController';
+import * as PasienDashboard from '@/actions/App/Http/Controllers/Pasien/DashboardController';
 
 withDefaults(
     defineProps<{
@@ -10,6 +16,16 @@ withDefaults(
         canRegister: true,
     },
 );
+
+const { hasRole, user } = useAuth();
+
+const homeDashboard = computed(() => {
+    if (hasRole('admin')) return AdminDashboard.index.url();
+    if (hasRole('petugas')) return PetugasDashboard.index.url();
+    if (hasRole('dokter')) return DokterDashboard.index.url();
+    if (hasRole('pasien')) return PasienDashboard.index.url();
+    return '#';
+});
 </script>
 
 <template>
@@ -25,8 +41,8 @@ withDefaults(
         >
             <nav class="flex items-center justify-end gap-4">
                 <Link
-                    v-if="$page.props.auth.user"
-                    :href="dashboard()"
+                    v-if="user"
+                    :href="homeDashboard"
                     class="inline-block rounded-sm border border-[#19140035] px-5 py-1.5 text-sm leading-normal text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:text-[#EDEDEC] dark:hover:border-[#62605b]"
                 >
                     Dashboard

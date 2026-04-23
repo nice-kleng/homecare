@@ -11,4 +11,6 @@ export type NavItem = {
     href: NonNullable<InertiaLinkProps['href']>;
     icon?: LucideIcon;
     isActive?: boolean;
+    roles?: string[];       // tampil jika user punya salah satu role ini
+    permissions?: string[]; // tampil jika user punya salah satu permission ini
 };
